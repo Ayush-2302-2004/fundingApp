@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "lib": ["es2023"],
+    "module": "node16",
+    "target": "es2022",
+    "allowJs": true,
+    "checkJs": false,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node16",
+    "outDir": "dist"
+  },
+  "include": [
+    "hardhat.config.js",
+    "scripts/**/*.{js,ts}",
+    "test/**/*.{js,ts}",
+    "typechain-types/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist", "artifacts", "cache", "hardhat.config.ts"]
+}
