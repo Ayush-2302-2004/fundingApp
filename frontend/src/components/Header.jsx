@@ -32,8 +32,8 @@ export default function Header() {
           className="flex items-center gap-2 cursor-pointer group"
           onClick={() => navigate("/")}
         >
-          <span className="font-orbitron font-bold text-xl text-accent-green tracking-wider glow-green-text group-hover:text-accent-greenHover transition-colors">
-            The FundingApp
+          <span className="font-orbitron font-bold text-xl tracking-wider text-[#00F0FF] drop-shadow-[0_0_12px_rgba(0,240,255,0.35)] group-hover:text-[#5ff] transition-colors">
+            THE FUNDING APP
           </span>
         </div>
 
@@ -120,9 +120,8 @@ export default function Header() {
           ) : (
             <button
               onClick={connectWallet}
-              className="font-inter text-sm font-medium px-6 py-2.5 border border-accent-green text-accent-green rounded-lg 
-                         hover:bg-accent-green hover:text-dark-primary transition-all duration-200 
-                         tracking-wide"
+              className="font-inter text-sm font-semibold px-6 py-2.5 rounded-lg bg-[#00F0FF] text-[#0B0E11] tracking-wide
+                         shadow-[0_0_20px_rgba(0,240,255,0.35)] hover:bg-[#5ff] hover:shadow-[0_0_28px_rgba(0,240,255,0.45)] transition-all"
             >
               Connect Wallet
             </button>

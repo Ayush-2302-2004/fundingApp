@@ -9,6 +9,9 @@ import { ethers } from "ethers";
 
 const Web3Context = createContext();
 
+/** Polygon Amoy testnet — must match where CampaignFactory was deployed. */
+const POLYGON_AMOY_HEX = "0x13882"; // 80002
+
 export function Web3Provider({ children }) {
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
@@ -45,6 +48,37 @@ export function Web3Provider({ children }) {
     setSigner(null);
   }, []);
 
+  const ensurePolygonAmoy = useCallback(async () => {
+    if (!window.ethereum) throw new Error("No wallet found.");
+    try {
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: POLYGON_AMOY_HEX }],
+      });
+    } catch (switchError) {
+      if (switchError?.code === 4902) {
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: POLYGON_AMOY_HEX,
+              chainName: "Polygon Amoy",
+              nativeCurrency: {
+                name: "POL",
+                symbol: "POL",
+                decimals: 18,
+              },
+              rpcUrls: ["https://rpc-amoy.polygon.technology"],
+              blockExplorerUrls: ["https://amoy.polygonscan.com"],
+            },
+          ],
+        });
+        return;
+      }
+      throw switchError;
+    }
+  }, []);
+
   const toggleTheme = useCallback(() => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   }, []);
@@ -65,6 +99,7 @@ export function Web3Provider({ children }) {
     theme,
     connectWallet,
     disconnectWallet,
+    ensurePolygonAmoy,
     toggleTheme,
   };
 

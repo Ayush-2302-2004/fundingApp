@@ -11,6 +11,8 @@ export function useContract() {
 
   const factoryContract = useMemo(() => {
     if (!factoryAddress) return null;
+    const signerOrProvider = signer || provider;
+    if (!signerOrProvider) return null;
     return new ethers.Contract(factoryAddress, FACTORY_ABI, signerOrProvider);
   }, [signer, provider, factoryAddress]);
 
