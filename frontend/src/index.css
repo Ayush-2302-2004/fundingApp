@@ -127,6 +127,12 @@ code {
   text-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
 }
 
+.glow-red {
+  box-shadow:
+    0 0 12px rgba(239, 68, 68, 0.35),
+    0 0 24px rgba(239, 68, 68, 0.15);
+}
+
 /* Subtle border glow on hover */
 .card-hover {
   transition: all 0.3s ease;

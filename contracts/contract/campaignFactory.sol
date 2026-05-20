@@ -17,6 +17,11 @@ contract CampaignFactory {
         string category
     );
 
+    event CampaignDeleted(
+        address indexed campaignAddress,
+        address indexed owner
+    );
+
     function createCampaign(
         string memory _title,
         uint _requiredAmount,
@@ -47,5 +52,25 @@ contract CampaignFactory {
 
     function getDeployedCampaigns() public view returns (address[] memory) {
         return deployedCampaigns;
+    }
+
+    function deleteCampaign(address _campaign) public {
+        Campaign campaign = Campaign(_campaign);
+        require(campaign.owner() == msg.sender, "Only campaign owner can delete");
+        require(
+            campaign.receivedAmount() == 0,
+            "Cannot delete campaign with donations"
+        );
+
+        uint256 length = deployedCampaigns.length;
+        for (uint256 i = 0; i < length; i++) {
+            if (deployedCampaigns[i] == _campaign) {
+                deployedCampaigns[i] = deployedCampaigns[length - 1];
+                deployedCampaigns.pop();
+                emit CampaignDeleted(_campaign, msg.sender);
+                return;
+            }
+        }
+        revert("Campaign not found");
     }
 }

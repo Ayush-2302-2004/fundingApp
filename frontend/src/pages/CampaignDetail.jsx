@@ -24,7 +24,7 @@ import DonationForm from "../components/DonationForm";
 
 export default function CampaignDetail() {
   const { address } = useParams();
-  const { provider, account } = useWeb3();
+  const { provider, readProvider, account } = useWeb3();
   const { getCampaignContract } = useContract();
   const [campaign, setCampaign] = useState(null);
   const [donations, setDonations] = useState([]);
@@ -38,12 +38,14 @@ export default function CampaignDetail() {
       setLoading(true);
       setError("");
       try {
-        if (provider && address) {
-          const campaignData = await getCampaignDetail(address, provider);
+        if (readProvider && address) {
+          const campaignData = await getCampaignDetail(address, readProvider);
           if (campaignData) {
             setCampaign(campaignData);
-            // Load donations
-            const donationsList = await getCampaignDonations(address, provider);
+            const donationsList = await getCampaignDonations(
+              address,
+              readProvider,
+            );
             setDonations(donationsList);
           } else {
             setError("Campaign not found. Invalid address?");
@@ -58,7 +60,7 @@ export default function CampaignDetail() {
     };
 
     loadData();
-  }, [provider, address]);
+  }, [readProvider, address]);
 
   const handleDonate = async (amountMatic) => {
     if (!account || !provider || !campaign) {
@@ -81,11 +83,11 @@ export default function CampaignDetail() {
       await tx.wait();
 
       // Reload campaign to show new amount
-      const updated = await getCampaignDetail(address, provider);
+      const updated = await getCampaignDetail(address, readProvider);
       setCampaign(updated);
 
       // Reload donations
-      const newDonations = await getCampaignDonations(address, provider);
+      const newDonations = await getCampaignDonations(address, readProvider);
       setDonations(newDonations);
 
       alert(`Donated ${amountMatic} MATIC successfully!`);
@@ -137,21 +139,6 @@ export default function CampaignDetail() {
               alt={campaign.title}
               className="w-full h-full object-cover"
             />
-          </div>
-
-          {/* Title and Basic Info */}
-          <div className="mb-8">
-            <h1 className="text-5xl font-orbitron font-bold text-text-primary mb-3">
-              {campaign.title}
-            </h1>
-            <p className="font-mono text-sm text-text-muted mb-4">
-              Contract: {campaign.address.slice(0, 10)}...
-              {campaign.address.slice(-8)}
-            </p>
-            <p className="font-mono text-sm text-text-muted">
-              Creator: {campaign.owner.slice(0, 10)}...
-              {campaign.owner.slice(-8)}
-            </p>
           </div>
 
           {/* Progress Bar */}

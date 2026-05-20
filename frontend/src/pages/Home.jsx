@@ -23,7 +23,7 @@ const statusClasses = {
 };
 
 export default function Home() {
-  const { provider } = useWeb3();
+  const { readProvider } = useWeb3();
   const { factoryContract } = useContract();
   const [campaigns, setCampaigns] = useState([]);
   const [stats, setStats] = useState(null);
@@ -36,8 +36,8 @@ export default function Home() {
       setLoading(true);
       setError("");
       try {
-        if (factoryContract && provider) {
-          const data = await getCampaigns(factoryContract, provider);
+        if (factoryContract && readProvider) {
+          const data = await getCampaigns(factoryContract, readProvider);
           setCampaigns(data);
 
           // Calculate stats
@@ -55,7 +55,7 @@ export default function Home() {
     };
 
     loadCampaigns();
-  }, [factoryContract, provider]);
+  }, [factoryContract, readProvider]);
 
   const statCards = stats
     ? [
@@ -78,6 +78,18 @@ export default function Home() {
     : [];
 
   const featuredCampaign = campaigns.length > 0 ? campaigns[0] : null;
+
+  const handleCampaignDeleted = (address) => {
+    setCampaigns((prev) => {
+      const next = prev.filter((c) => c.address !== address);
+      if (next.length > 0) {
+        setStats(calculateStats(next));
+      } else {
+        setStats(null);
+      }
+      return next;
+    });
+  };
 
   return (
     <div className="max-w-[1200px] mx-auto px-6 py-8">
@@ -108,7 +120,10 @@ export default function Home() {
             </p>
           </div>
           <div className="p-4">
-            <Card campaign={featuredCampaign} />
+            <Card
+              campaign={featuredCampaign}
+              onDeleted={handleCampaignDeleted}
+            />
           </div>
         </section>
       ) : (
@@ -157,7 +172,11 @@ export default function Home() {
         {campaigns.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {campaigns.map((campaign) => (
-              <Card key={campaign.address} campaign={campaign} />
+              <Card
+                key={campaign.address}
+                campaign={campaign}
+                onDeleted={handleCampaignDeleted}
+              />
             ))}
           </div>
         ) : (

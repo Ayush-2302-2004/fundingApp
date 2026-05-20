@@ -176,6 +176,31 @@ export async function uploadToPinata(file) {
 }
 
 /**
+ * Delete a campaign from the factory (on-chain). Requires wallet signer.
+ * Owner verification is enforced on-chain; frontend also checks before sending.
+ */
+export async function deleteCampaign(
+  factoryContract,
+  campaignAddress,
+  connectedAccount,
+  campaignOwner,
+) {
+  if (!factoryContract || !connectedAccount) {
+    throw new Error("Connect your wallet to delete a campaign.");
+  }
+
+  if (
+    connectedAccount.toLowerCase() !== campaignOwner?.toLowerCase()
+  ) {
+    throw new Error("Only the campaign owner can delete this campaign.");
+  }
+
+  const tx = await factoryContract.deleteCampaign(campaignAddress);
+  await tx.wait();
+  return true;
+}
+
+/**
  * Calculate campaign stats from array of campaigns
  */
 export function calculateStats(campaigns) {

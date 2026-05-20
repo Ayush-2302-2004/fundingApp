@@ -5,26 +5,31 @@ import FACTORY_ABI from "../utils/FactoryABI.json";
 import CAMPAIGN_ABI from "../utils/CampaignABI.json";
 
 export function useContract() {
-  const { signer, provider } = useWeb3();
+  const { signer, readProvider } = useWeb3();
 
   const factoryAddress = import.meta.env.VITE_FACTORY_ADDRESS;
 
   const factoryContract = useMemo(() => {
-    if (!factoryAddress) return null;
-    const signerOrProvider = signer || provider;
-    if (!signerOrProvider) return null;
-    return new ethers.Contract(factoryAddress, FACTORY_ABI, signerOrProvider);
-  }, [signer, provider, factoryAddress]);
+    if (!factoryAddress || !readProvider) return null;
+    const connection = signer || readProvider;
+    return new ethers.Contract(factoryAddress, FACTORY_ABI, connection);
+  }, [signer, readProvider, factoryAddress]);
 
   const getCampaignContract = (address) => {
-    const signerOrProvider = signer || provider;
-    if (!signerOrProvider) return null;
+    const connection = signer || readProvider;
+    if (!connection) return null;
 
-    return new ethers.Contract(address, CAMPAIGN_ABI, signerOrProvider);
+    return new ethers.Contract(address, CAMPAIGN_ABI, connection);
   };
+
+  const factoryContractWithSigner = useMemo(() => {
+    if (!factoryAddress || !signer) return null;
+    return new ethers.Contract(factoryAddress, FACTORY_ABI, signer);
+  }, [signer, factoryAddress]);
 
   return {
     factoryContract,
+    factoryContractWithSigner,
     getCampaignContract,
   };
 }

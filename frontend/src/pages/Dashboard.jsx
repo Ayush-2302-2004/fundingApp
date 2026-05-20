@@ -16,7 +16,7 @@ import { getCampaigns } from "../services/campaignService";
 import Card from "../components/Card";
 
 export default function Dashboard() {
-  const { account, provider } = useWeb3();
+  const { account, readProvider } = useWeb3();
   const { factoryContract } = useContract();
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,8 +33,8 @@ export default function Dashboard() {
           return;
         }
 
-        if (factoryContract && provider) {
-          const allCampaigns = await getCampaigns(factoryContract, provider);
+        if (factoryContract && readProvider) {
+          const allCampaigns = await getCampaigns(factoryContract, readProvider);
 
           // Filter campaigns owned by user
           const userCampaigns = allCampaigns.filter(
@@ -52,9 +52,13 @@ export default function Dashboard() {
     };
 
     loadUserCampaigns();
-  }, [factoryContract, provider, account]);
+  }, [factoryContract, readProvider, account]);
 
   // Calculate user stats
+  const handleCampaignDeleted = (address) => {
+    setCampaigns((prev) => prev.filter((c) => c.address !== address));
+  };
+
   const userStats = {
     totalCampaigns: campaigns.length,
     totalRaised: campaigns.reduce((sum, c) => sum + c.received, 0),
@@ -137,7 +141,11 @@ export default function Dashboard() {
         ) : campaigns.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {campaigns.map((campaign) => (
-              <Card key={campaign.address} campaign={campaign} />
+              <Card
+                key={campaign.address}
+                campaign={campaign}
+                onDeleted={handleCampaignDeleted}
+              />
             ))}
           </div>
         ) : (

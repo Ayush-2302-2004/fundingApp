@@ -11,12 +11,20 @@ const Web3Context = createContext();
 
 /** Polygon Amoy testnet — must match where CampaignFactory was deployed. */
 const POLYGON_AMOY_HEX = "0x13882"; // 80002
+const DEFAULT_AMOY_RPC = "https://rpc-amoy.polygon.technology";
 
 export function Web3Provider({ children }) {
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
   const [theme, setTheme] = useState("light");
+  /** Public RPC for read-only calls — works without MetaMask. */
+  const [readProvider] = useState(
+    () =>
+      new ethers.JsonRpcProvider(
+        import.meta.env.VITE_AMOY_RPC_URL || DEFAULT_AMOY_RPC,
+      ),
+  );
 
   const connectWallet = useCallback(async () => {
     try {
@@ -95,6 +103,7 @@ export function Web3Provider({ children }) {
   const value = {
     account,
     provider,
+    readProvider,
     signer,
     theme,
     connectWallet,
