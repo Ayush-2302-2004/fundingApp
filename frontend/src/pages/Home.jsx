@@ -11,7 +11,6 @@
 
 import { useState, useEffect } from "react";
 import Card from "../components/Card";
-import Header from "../components/Header";
 import { useWeb3 } from "../context/Web3Context";
 import { useContract } from "../hooks/useContract";
 import { getCampaigns, calculateStats } from "../services/campaignService";
@@ -92,12 +91,27 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto px-6 py-8">
-      <section className="mb-8">
-        <h1 className="text-5xl md:text-6xl font-orbitron leading-tight text-text-primary">
-          CAMPAIGNS
+    <>
+      {/* Full-viewport hero — campaigns sit below the fold */}
+      <section
+        className="min-h-[calc(100svh-5rem)] flex items-center justify-center px-6 py-12 text-center"
+        aria-label="Welcome"
+      >
+        <h1
+          className="max-w-5xl font-orbitron text-3xl sm:text-4xl md:text-5xl lg:text-6xl
+                     leading-tight tracking-wide bg-gradient-to-r from-cyan-400 to-emerald-400
+                     bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(0,255,255,0.5)]"
+        >
+          WELCOME TO THE FUTURE OF BLOCKCHAIN-BASED FUNDRAISING
         </h1>
       </section>
+
+      <div className="max-w-[1200px] mx-auto px-6 pb-8">
+        <section className="mb-8">
+          <h2 className="text-5xl md:text-6xl font-orbitron leading-tight text-text-primary">
+            CAMPAIGNS
+          </h2>
+        </section>
 
       {error && (
         <div className="mb-8 rounded-lg border border-red-500/40 bg-red-950/40 px-6 py-4 text-red-200">
@@ -190,6 +204,7 @@ export default function Home() {
           )
         )}
       </section>
-    </div>
+      </div>
+    </>
   );
 }

@@ -7,6 +7,7 @@ import CampaignDetail from "./pages/CampaignDetail";
 import CreateCampaign from "./pages/CreateCampaign";
 import Dashboard from "./pages/Dashboard";
 import AboutPage from "./pages/AboutPage";
+import Help from "./pages/Help";
 function App() {
   return (
     <Router>
@@ -20,6 +21,7 @@ function App() {
               <Route path="/create" element={<CreateCampaign />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/help" element={<Help />} />
             </Routes>
           </main>
         </div>

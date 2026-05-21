@@ -469,7 +469,6 @@ export default function About() {
     </div>
   );
 }
-
 // export default function AboutPage() {
 //   const features = [
 //     {
