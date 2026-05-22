@@ -21,6 +21,7 @@ import {
   getCampaignDonations,
 } from "../services/campaignService";
 import DonationForm from "../components/DonationForm";
+import { formatEthersError } from "../utils/formatEthersError";
 
 export default function CampaignDetail() {
   const { address } = useParams();
@@ -93,7 +94,7 @@ export default function CampaignDetail() {
       alert(`Donated ${amountMatic} MATIC successfully!`);
     } catch (err) {
       console.error("Donation failed:", err);
-      setError(err.message || "Donation failed. Check console.");
+      setError(formatEthersError(err));
     } finally {
       setDonating(false);
     }
