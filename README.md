@@ -22,7 +22,4 @@ changes in code
 
 Do changes in code
 
-write good code
-
-small changes done
 
