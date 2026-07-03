@@ -19,7 +19,7 @@ If you are developing a production application, we recommend using TypeScript wi
 clean code
 
 changes in code
-
+minor changes
 
 link=fundingappof1-nf606nuuh-ayush-2302-2004s-projects.vercel.app
 
