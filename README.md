@@ -20,7 +20,6 @@ clean code
 
 changes in code
 
-Do changes in code
 
 link=fundingappof1-nf606nuuh-ayush-2302-2004s-projects.vercel.app
 
